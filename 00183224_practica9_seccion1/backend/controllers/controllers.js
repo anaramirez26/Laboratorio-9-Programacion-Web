@@ -1,6 +1,6 @@
 
 import { pool } from '../data/connection.js';
-import { hashedPasswd } from '../utils/hash.js';
+import hashP from '../utils/hash.js';
 
 const displayHome = (request, response) => {
     response.status(200).json({ message: "Welcome to the User Management API" });
@@ -29,7 +29,7 @@ const updateUser = async (request, response) => {
     try {
         const id = parseInt(request.params.id);
         const { name, email, passwd } = request.body;
-        const hashedPasswd = await hashedPasswd(passwd);
+        const hashedPasswd = await hashP(passwd);
 
         const result = await pool.query(
             'UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 RETURNING *',

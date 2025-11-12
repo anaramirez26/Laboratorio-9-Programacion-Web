@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt, { hash } from "bcrypt";
 import { pool } from '../data/connection.js';
 import { JWT_SECRET } from '../middleware/token.js';
-import  hashedPasswd  from '../utils/hash.js';
+import  hashP  from '../utils/hash.js';
 
 const signup = async (request, response) => {
     try {
@@ -12,7 +12,7 @@ const signup = async (request, response) => {
             return response.status(400).json({ message: 'Faltan campos: name, email o passwd' });
         }
 
-        const hashedPasswd = await hashedPasswd.hashedPasswd(passwd);
+        const hashedPasswd = await hashP(passwd);
         pool.query(
             'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, email',
             [name, email, hashedPasswd]
