@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 
-export const hashedPasswd = async (passwd) => {
+const hashedPsswd = async (passwd) => {
     return await bcrypt.hash(String(passwd), 10);
 }
+
+export default { hashedPsswd}

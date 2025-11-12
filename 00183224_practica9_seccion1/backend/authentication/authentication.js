@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
 import bcrypt, { hash } from "bcrypt";
-import { pool } from '../../data/connection.js';
-import { JWT_SECRET } from '../../middleware/token.js';
-import { hashedPasswd } from '../../utils/hash.js';
+import { pool } from '../data/connection.js';
+import { JWT_SECRET } from '../middleware/token.js';
+import  hashedPasswd  from '../utils/hash.js';
 
-
-export const signup = async (request, response) => {
+const signup = async (request, response) => {
     try {
         const { name, email, passwd } = request.body;
 
@@ -13,7 +12,7 @@ export const signup = async (request, response) => {
             return response.status(400).json({ message: 'Faltan campos: name, email o passwd' });
         }
 
-        const hashedPasswd = await hashedPasswd(passwd);
+        const hashedPasswd = await hashedPasswd.hashedPasswd(passwd);
         pool.query(
             'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, email',
             [name, email, hashedPasswd]
@@ -25,7 +24,7 @@ export const signup = async (request, response) => {
     }
 };
 
-export const signin= async (req, res) => {
+const signin= async (req, res) => {
     const { email, passwd } = req.body;
 
     try {
@@ -52,3 +51,5 @@ export const signin= async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export default {signup, signin};
